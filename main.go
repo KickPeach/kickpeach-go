@@ -20,7 +20,8 @@ func onlyForV2() kickpeach.HandlerFunc {
 
 func main() {
 	r := kickpeach.New()
-	r.Use(kickpeach.Logger()) // global midlleware
+	r.Use(kickpeach.Logger())   // global midlleware
+	r.Use(kickpeach.Recovery()) // global midlleware
 	r.GET("/", func(c *kickpeach.Context) {
 		c.HTML(http.StatusOK, "<h1>Hello kickpeach</h1>")
 	})
@@ -32,6 +33,11 @@ func main() {
 			c.String(http.StatusOK, "hello %s, you're at %s\n", c.Param("name"), c.Path)
 		})
 	}
+
+	r.GET("/panic", func(c *kickpeach.Context) {
+		names := []string{"sevenshi"}
+		c.String(http.StatusOK, names[100])
+	})
 
 	r.Run(":9999")
 }
