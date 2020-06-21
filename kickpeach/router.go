@@ -1,7 +1,6 @@
 package kickpeach
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 )
@@ -36,10 +35,10 @@ func parsePattern(pattern string) []string {
 
 func (r *router)addRoute(method string,pattern string,handler HandlerFunc) {
 	parts := parsePattern(pattern)
-	fmt.Print(parts)
 
 	key := method+"-"+pattern
 	_,ok :=r.roots[method]
+
 	if !ok {
 		r.roots[method] = &node{}
 	}
@@ -59,6 +58,7 @@ func (r *router) getRoute(method string,path string)(*node,map[string]string) {
 	}
 
 	n := root.search(searchParts,0)
+
 	if n !=nil {
 		parts := parsePattern(n.pattern)
 		for index,part := range parts{
@@ -68,7 +68,7 @@ func (r *router) getRoute(method string,path string)(*node,map[string]string) {
 
 			if part[0] == '*' && len(part)>1 {
 				params[part[1:]] = strings.Join(searchParts[index:],"/")
-				break;
+				break
 			}
 
 		}
